@@ -1,0 +1,10 @@
+PODS:
+  - MapboxGL (0.3.1)
+
+DEPENDENCIES:
+  - MapboxGL
+
+SPEC CHECKSUMS:
+  MapboxGL: c3de58589d99c678da9e2a8315c8b1e7054ddfa1
+
+COCOAPODS: 0.37.1
