@@ -17,18 +17,17 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let accessToken = "sk.eyJ1IjoiaHhxM3RzciIsImEiOiIyYzNlMGIyNTdiZjE5NDExMTU0YTZkNjQ1ZmZlMGFkMSJ9.80aHSYxCP2qtdRjPMeguuw"
-        
-        MGLAccountManager.setMapboxMetricsEnabledSettingShownInApp(true)
-        MGLAccountManager.setAccessToken(accessToken)
-        
-        if(self.mapView != nil){
-            self.mapView.accessToken = accessToken
-        } else {
-            self.mapView = MGLMapView(frame: self.view.bounds, accessToken:accessToken)
-        }
-
         self.mapView.setCenterCoordinate(CLLocationCoordinate2DMake(40.73, -73.98), zoomLevel: 12, animated: false)
+        
+        /*
+        // Declare the annotation `point` and set its coordinates, title, and subtitle
+        let point = MGLPointAnnotation()
+        point.coordinate = CLLocationCoordinate2D(latitude: 40.734368, longitude: -73.986487)
+        point.title = "Hello world!"
+        point.subtitle = "Welcome to The Ellipse."
+        
+        self.mapView.addAnnotation(point)
+        */
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,8 +37,19 @@ class ViewController: UIViewController, MGLMapViewDelegate {
     
     // MARK: MGLMapViewDelegate
 
-    func mapView(mapView: MGLMapView!, symbolNameForAnnotation annotation: MGLAnnotation!) -> String! {
-        return "secondary_marker"
+    func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
+        // Attempt to reuse a cached image
+        var annotationImage = self.mapView.dequeueReusableAnnotationImageWithIdentifier("marker")
+        
+        if (annotationImage == nil) {
+            // Load an image from your app bundle; requires 1x, 2x, and 3x assets
+            let image = UIImage(named: "marker")
+            
+            // Instantiate MGLAnnotationImage with our image and use it for this annotation
+            annotationImage = MGLAnnotationImage(image: image!, reuseIdentifier: "marker")
+        }
+        
+        return annotationImage
     }
 
 }
