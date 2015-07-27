@@ -18,8 +18,11 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         
         self.mapView.setCenterCoordinate(CLLocationCoordinate2DMake(40.73, -73.98), zoomLevel: 12, animated: false)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
-        /*
         // Declare the annotation `point` and set its coordinates, title, and subtitle
         let point = MGLPointAnnotation()
         point.coordinate = CLLocationCoordinate2D(latitude: 40.734368, longitude: -73.986487)
@@ -27,7 +30,6 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         point.subtitle = "Welcome to The Ellipse."
         
         self.mapView.addAnnotation(point)
-        */
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,6 +53,4 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         
         return annotationImage
     }
-
 }
-
