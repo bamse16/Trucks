@@ -45,7 +45,7 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         
         if (annotationImage == nil) {
             // Load an image from your app bundle; requires 1x, 2x, and 3x assets
-            let image = UIImage(named: "marker")
+            let image = UIImage(named: "hydrant")
             
             // Instantiate MGLAnnotationImage with our image and use it for this annotation
             annotationImage = MGLAnnotationImage(image: image!, reuseIdentifier: "marker")
