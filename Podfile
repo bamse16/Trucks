@@ -1,5 +1,5 @@
-platform :ios, "8.0"
+platform :ios, "9.0"
 
-pod 'MapboxGL'
+pod 'Mapbox-iOS-SDK'
 
 use_frameworks!
