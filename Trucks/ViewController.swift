@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import MapboxGL
+import Mapbox
 
 class ViewController: UIViewController, MGLMapViewDelegate {
 
