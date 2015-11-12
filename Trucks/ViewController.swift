@@ -18,6 +18,11 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         
         self.mapView.setCenterCoordinate(CLLocationCoordinate2DMake(40.73, -73.98), zoomLevel: 12, animated: false)
+        
+        let info = NSBundle.mainBundle().infoDictionary
+        let pubnubChannel = info?["PubNubChannel"] as? String
+        
+        NSLog("using channel %@", pubnubChannel!)
     }
     
     override func viewDidAppear(animated: Bool) {
