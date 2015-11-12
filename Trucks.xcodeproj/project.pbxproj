@@ -13,7 +13,6 @@
 		2911CDF31B0F57B8004D2E40 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2911CDF21B0F57B8004D2E40 /* Images.xcassets */; };
 		2911CDF61B0F57B8004D2E40 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2911CDF41B0F57B8004D2E40 /* LaunchScreen.xib */; };
 		2911CE021B0F57B8004D2E40 /* TrucksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2911CE011B0F57B8004D2E40 /* TrucksTests.swift */; };
-		2973E0881BDE501E0061A133 /* App.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 2973E0871BDE501E0061A133 /* App.debug.xcconfig */; };
 		497C9442374D18D77E990349 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 735F78FE3E0F2AFE7948F374 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -187,7 +186,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Marius Ursache";
 				TargetAttributes = {
 					2911CDE51B0F57B8004D2E40 = {
@@ -231,7 +230,6 @@
 				2911CDF11B0F57B8004D2E40 /* Main.storyboard in Resources */,
 				2911CDF61B0F57B8004D2E40 /* LaunchScreen.xib in Resources */,
 				2911CDF31B0F57B8004D2E40 /* Images.xcassets in Resources */,
-				2973E0881BDE501E0061A133 /* App.debug.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
