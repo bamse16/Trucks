@@ -34,6 +34,8 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         point.title = "Hello world!"
         point.subtitle = "Welcome to The Ellipse."
         
+        self.loadLocations()
+        
         self.mapView.addAnnotation(point)
     }
 
@@ -57,5 +59,19 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         }
         
         return annotationImage
+    }
+    
+    func loadLocations() {
+        if let path = NSBundle.mainBundle().pathForResource("location", ofType: "json") {
+            do {
+                let data = try NSData(contentsOfURL: NSURL(fileURLWithPath: path), options: NSDataReadingOptions.DataReadingMappedIfSafe)
+                if let locationItems = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as? NSArray {
+                    NSLog("locationItems %@", locationItems);
+                }
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        }
+
     }
 }
