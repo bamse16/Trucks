@@ -8,6 +8,7 @@
 
 import UIKit
 import Mapbox
+import ObjectMapper
 
 class ViewController: UIViewController, MGLMapViewDelegate {
 
@@ -17,26 +18,18 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.mapView.setCenterCoordinate(CLLocationCoordinate2DMake(40.73, -73.98), zoomLevel: 12, animated: false)
+        self.mapView.setCenterCoordinate(CLLocationCoordinate2DMake(38.076, -122.515), zoomLevel: 12, animated: false)
         
         let info = NSBundle.mainBundle().infoDictionary
         let pubnubChannel = info?["PubNubChannel"] as? String
         
         NSLog("using channel %@", pubnubChannel!)
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
         
-        // Declare the annotation `point` and set its coordinates, title, and subtitle
-        let point = MGLPointAnnotation()
-        point.coordinate = CLLocationCoordinate2D(latitude: 40.734368, longitude: -73.986487)
-        point.title = "Hello world!"
-        point.subtitle = "Welcome to The Ellipse."
+        let locations = self.loadLocations().map { (location) -> MGLPointAnnotation in
+            return LocationAnnotation(location)!.annotation() as MGLPointAnnotation
+        }
         
-        self.loadLocations()
-        
-        self.mapView.addAnnotation(point)
+        self.mapView.addAnnotations(locations)
     }
 
     override func didReceiveMemoryWarning() {
@@ -61,17 +54,20 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         return annotationImage
     }
     
-    func loadLocations() {
+    func loadLocations() -> Array<Location> {
+        var locations = Array<Location>()
         if let path = NSBundle.mainBundle().pathForResource("location", ofType: "json") {
             do {
                 let data = try NSData(contentsOfURL: NSURL(fileURLWithPath: path), options: NSDataReadingOptions.DataReadingMappedIfSafe)
                 if let locationItems = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as? NSArray {
-                    NSLog("locationItems %@", locationItems);
+                    if let jsLocations = Mapper<Location>().mapArray(locationItems) {
+                        locations = jsLocations
+                    }
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
         }
-
+        return locations
     }
 }
