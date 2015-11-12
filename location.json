@@ -1,0 +1,24 @@
+[
+  {
+    "uuid": "1a7a7281-62bd-431b-ad36-929b2f4fa733",
+    "modified_unix_date": 1427732756.998076,
+    "location": {
+      "longitude": -122.5151136518666,
+      "latitude": 38.07636839806855
+    },
+    "device_type": "ipad",
+    "username": "iPad1",
+    "active": true
+  },
+  {
+    "username": "JPELK",
+    "location": {
+      "longitude": -122.0479792916421,
+      "latitude": 37.05580911602551
+    },
+    "modified_unix_date": 1429329641.138291,
+    "uuid": "895764ba-708a-4bf5-bc9d-ae43514ee89d",
+    "device_type": "Truck1",
+    "active": true
+  }
+]
