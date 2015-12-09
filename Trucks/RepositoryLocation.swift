@@ -40,4 +40,31 @@ class RepositoryLocation {
         
         return locations
     }
+    
+    func geographicMidPoint() -> CLLocationCoordinate2D {
+        var x: Double = 0
+        var y: Double = 0
+        var z: Double = 0
+        var w: Double = 0
+
+        if self.locations.count == 0 {
+            return LocationXYZ(xD: x, yD: y, zD: z).asCoordinate()
+        }
+        
+        for item in self.locations {
+            let xyz = item.asLocationXYZ()
+            
+            x = x + xyz.x
+            y = y + xyz.y
+            z = z + xyz.z
+            w = w + xyz.w
+        }
+        
+        x = x / w
+        y = y / w
+        z = z / w
+        
+        let midPoint = LocationXYZ(xD: x, yD: y, zD: z).asCoordinate()
+        return midPoint
+    }
 }

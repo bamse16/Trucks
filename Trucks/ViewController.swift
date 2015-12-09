@@ -30,6 +30,9 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         let locations = repository.asAnnotations()
         
         self.mapView.addAnnotations(locations)
+        
+        let midPoint = repository.geographicMidPoint()
+        self.mapView.setCenterCoordinate(midPoint, animated: true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,5 +55,5 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         }
         
         return annotationImage
-    }    
+    }
 }
