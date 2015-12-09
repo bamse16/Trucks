@@ -25,9 +25,9 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         
         NSLog("using channel %@", pubnubChannel!)
         
-        let locations = self.loadLocations().map { (location) -> MGLPointAnnotation in
-            return LocationAnnotation(location)!.annotation() as MGLPointAnnotation
-        }
+        let repository = RepositoryLocation()
+        repository.loadItems()
+        let locations = repository.asAnnotations()
         
         self.mapView.addAnnotations(locations)
     }
@@ -52,22 +52,5 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         }
         
         return annotationImage
-    }
-    
-    func loadLocations() -> Array<Location> {
-        var locations = Array<Location>()
-        if let path = NSBundle.mainBundle().pathForResource("location", ofType: "json") {
-            do {
-                let data = try NSData(contentsOfURL: NSURL(fileURLWithPath: path), options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                if let locationItems = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as? NSArray {
-                    if let jsLocations = Mapper<Location>().mapArray(locationItems) {
-                        locations = jsLocations
-                    }
-                }
-            } catch let error as NSError {
-                print(error.localizedDescription)
-            }
-        }
-        return locations
-    }
+    }    
 }
