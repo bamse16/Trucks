@@ -25,13 +25,21 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         
         NSLog("using channel %@", pubnubChannel!)
         
-        let repository = RepositoryLocation()
-        repository.loadItems()
-        let locations = repository.asAnnotations()
         
-        self.mapView.addAnnotations(locations)
-        
-        self.mapView.showAnnotations(locations, animated: true)
+        // Adding the annotations after 1.3 seconds,
+        // Otherwise, they won't show up
+        // Workaround for 
+        // https://github.com/mapbox/mapbox-gl-native/issues/1675
+        // https://github.com/mapbox/mapbox-gl-native/issues/2956
+        delay(1.3) {
+            // do stuff
+            let repository = RepositoryLocation()
+            repository.loadItems()
+            let locations = repository.asAnnotations()
+
+            self.mapView.addAnnotations(locations)
+            self.mapView.showAnnotations(locations, animated: true)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,5 +62,18 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         }
         
         return annotationImage
+    }
+    
+    func mapView(mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
+        return true
+    }
+    
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
     }
 }
