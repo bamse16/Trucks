@@ -49,6 +49,11 @@ struct LocationXYZ {
     }
 }
 
+enum LocationType: String {
+    case iPad = "ipad"
+    case Truck = "truck"
+}
+
 class Location: NSObject, Mappable {
     var active: Bool!
     var modifiedDate: NSDate!
@@ -56,6 +61,7 @@ class Location: NSObject, Mappable {
     var longitude: Double!
     var username: String!
     var uuid: String?
+    var type: LocationType = LocationType.iPad
 
     required init?(_ map: Map) {
         
@@ -69,6 +75,7 @@ class Location: NSObject, Mappable {
         longitude       <- map["location.longitude"]
         uuid            <- map["uuid"]
         username        <- map["username"]
+        type            <- map["device_type"]
     }
     
     override var description: String {
@@ -79,5 +86,18 @@ class Location: NSObject, Mappable {
     
     func asLocationXYZ() -> LocationXYZ {
         return LocationXYZ(lat: self.latitude, lng: self.longitude)
+    }
+    
+    func stringType() -> String {
+        var strType: String
+        switch self.type {
+        case LocationType.Truck:
+            strType = "Truck"
+            
+        default:
+            strType = "iPad"
+        }
+        
+        return strType
     }
 }

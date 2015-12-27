@@ -20,6 +20,7 @@ class LocationAnnotation {
         let point = MGLPointAnnotation()
         point.coordinate = CLLocationCoordinate2D(latitude: self.location.latitude, longitude: self.location.longitude)
         point.title = self.location.username
+        point.subtitle = self.location.stringType()
         
         return point
     }
