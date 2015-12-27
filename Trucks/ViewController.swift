@@ -50,18 +50,10 @@ class ViewController: UIViewController, MGLMapViewDelegate {
     // MARK: MGLMapViewDelegate
 
     func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
-        // Attempt to reuse a cached image
-        var annotationImage = self.mapView.dequeueReusableAnnotationImageWithIdentifier("marker")
         
-        if (annotationImage == nil) {
-            // Load an image from your app bundle; requires 1x, 2x, and 3x assets
-            let image = UIImage(named: "hydrant")
-            
-            // Instantiate MGLAnnotationImage with our image and use it for this annotation
-            annotationImage = MGLAnnotationImage(image: image!, reuseIdentifier: "marker")
-        }
-        
-        return annotationImage
+        let annotationManager = AnnotationManager()
+        let image = annotationManager.annotationImage(mapView, imageForAnnotation: annotation)
+        return image
     }
     
     func mapView(mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {

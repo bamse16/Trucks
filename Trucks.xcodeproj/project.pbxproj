@@ -13,6 +13,8 @@
 		2911CDF31B0F57B8004D2E40 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2911CDF21B0F57B8004D2E40 /* Images.xcassets */; };
 		2911CDF61B0F57B8004D2E40 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2911CDF41B0F57B8004D2E40 /* LaunchScreen.xib */; };
 		2911CE021B0F57B8004D2E40 /* TrucksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2911CE011B0F57B8004D2E40 /* TrucksTests.swift */; };
+		292E81E01C2FE6C500A430DF /* AnnotationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292E81DF1C2FE6C500A430DF /* AnnotationManager.swift */; };
+		292E81E21C2FE79E00A430DF /* DeviceLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292E81E11C2FE79E00A430DF /* DeviceLocationView.swift */; };
 		29ABAF621C18347B00919321 /* RepositoryLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29ABAF611C18347B00919321 /* RepositoryLocation.swift */; };
 		29F1CB701BF5398E00FD2756 /* location.json in Resources */ = {isa = PBXBuildFile; fileRef = 29F1CB6F1BF5398E00FD2756 /* location.json */; };
 		29F1CB741BF53F4C00FD2756 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F1CB731BF53F4C00FD2756 /* Location.swift */; };
@@ -42,6 +44,8 @@
 		2911CDFB1B0F57B8004D2E40 /* TrucksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrucksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2911CE001B0F57B8004D2E40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2911CE011B0F57B8004D2E40 /* TrucksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrucksTests.swift; sourceTree = "<group>"; };
+		292E81DF1C2FE6C500A430DF /* AnnotationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationManager.swift; sourceTree = "<group>"; };
+		292E81E11C2FE79E00A430DF /* DeviceLocationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceLocationView.swift; sourceTree = "<group>"; };
 		2973E0871BDE501E0061A133 /* App.debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = App.debug.xcconfig; path = ../App.debug.xcconfig; sourceTree = "<group>"; };
 		29ABAF611C18347B00919321 /* RepositoryLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepositoryLocation.swift; sourceTree = "<group>"; };
 		29F1CB6F1BF5398E00FD2756 /* location.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = location.json; sourceTree = "<group>"; };
@@ -93,8 +97,10 @@
 		2911CDE81B0F57B8004D2E40 /* Trucks */ = {
 			isa = PBXGroup;
 			children = (
+				292E81DF1C2FE6C500A430DF /* AnnotationManager.swift */,
 				2973E0871BDE501E0061A133 /* App.debug.xcconfig */,
 				2911CDEB1B0F57B8004D2E40 /* AppDelegate.swift */,
+				292E81E11C2FE79E00A430DF /* DeviceLocationView.swift */,
 				2911CDF21B0F57B8004D2E40 /* Images.xcassets */,
 				2911CDF41B0F57B8004D2E40 /* LaunchScreen.xib */,
 				29F1CB731BF53F4C00FD2756 /* Location.swift */,
@@ -309,7 +315,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2911CDEE1B0F57B8004D2E40 /* ViewController.swift in Sources */,
+				292E81E21C2FE79E00A430DF /* DeviceLocationView.swift in Sources */,
 				29F1CB741BF53F4C00FD2756 /* Location.swift in Sources */,
+				292E81E01C2FE6C500A430DF /* AnnotationManager.swift in Sources */,
 				29ABAF621C18347B00919321 /* RepositoryLocation.swift in Sources */,
 				2911CDEC1B0F57B8004D2E40 /* AppDelegate.swift in Sources */,
 				29F1CB761BF548F000FD2756 /* LocationAnnotation.swift in Sources */,
