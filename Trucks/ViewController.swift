@@ -25,6 +25,15 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         let locationUseHTTPS = info?["APILocationUseHTTPS"] as? String
         let locationCookie = info?["APILocationCookie"] as? String
         
+        let repository = RepositoryLocation()
+        if let locationString = locationString, useHTTPS = locationUseHTTPS {
+            let httpsPrefix = (useHTTPS == "true") ? "https://" : "http://"
+            let locationS = String(format:"%@%@", httpsPrefix, locationString)
+            
+            let locationURL = NSURL(string: locationS)
+            repository.configure(locationURL, cookie: locationCookie)
+        }
+
         // Adding the annotations after 1.3 seconds,
         // Otherwise, they won't show up
         // Workaround for 
@@ -32,12 +41,21 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         // https://github.com/mapbox/mapbox-gl-native/issues/2956
         delay(1.3) {
             // do stuff
-            let repository = RepositoryLocation()
             repository.loadItems()
             let locations = repository.asAnnotations()
 
             self.mapView.addAnnotations(locations)
             self.mapView.showAnnotations(locations, animated: true)
+            
+            repository.getLocations({ (locations) -> Void in
+                NSLog("remote locations %@", locations)
+                
+                repository.locations = locations
+
+                let annotations = repository.asAnnotations()
+                self.mapView.addAnnotations(annotations)
+                self.mapView.showAnnotations(annotations, animated: true)
+            })
         }
     }
 

@@ -12,9 +12,16 @@ import ObjectMapper
 
 class RepositoryLocation {
     var locations: Array<Location>
+    var locationsURL: NSURL?
+    var cookie: String?
     
     required init() {
         self.locations = Array<Location>()
+    }
+    
+    func configure(url: NSURL?, cookie: String?) {
+        self.locationsURL = url
+        self.cookie = cookie
     }
     
     func loadItems() {
@@ -66,5 +73,58 @@ class RepositoryLocation {
         
         let midPoint = LocationXYZ(xD: x, yD: y, zD: z).asCoordinate()
         return midPoint
+    }
+    
+    func getItems<T: Mappable>(url: NSURL, cookie: String?, completion:(Array<T>)->Void) {
+        var parsedList = Array<T>()
+        
+        var extraHeaders = Dictionary<String, String>()
+        extraHeaders["Content-Type"] = "application/json";
+        extraHeaders["Accept"] = "application/json";
+        
+        if let cookie = cookie {
+            extraHeaders["Cookie"] = cookie;
+        }
+
+        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+        sessionConfig.HTTPAdditionalHeaders = extraHeaders
+
+        let request = NSURLRequest(URL: url)
+        let urlSession = NSURLSession(configuration: sessionConfig)
+        let dataTask = urlSession.dataTaskWithRequest(request) {
+            (let data, let response, let error) in
+            
+            if (error == nil) {
+                do {
+                    if let locationItems = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSArray {
+                        if let jsLocations = Mapper<T>().mapArray(locationItems) {
+                            parsedList = jsLocations
+                        }
+                    }
+
+                    // success ...
+                } catch {
+                    // failure
+                    print("Fetch failed: \((error as NSError).localizedDescription)")
+                }
+            } else {
+                print(error)
+            }
+            
+            // call the completion function (on the main thread)
+            dispatch_async(dispatch_get_main_queue()) {
+                completion(parsedList)
+            }
+        }
+        dataTask.resume()
+    }
+
+    func getLocations(completion:(Array<Location>)->Void) {
+        self.locations = Array<Location>()
+        if let locationsURL = self.locationsURL {
+            self.getItems(locationsURL, cookie:self.cookie, completion: completion)
+        } else {
+            completion(self.locations)
+        }
     }
 }
