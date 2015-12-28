@@ -49,6 +49,21 @@
 	</array>
 	<key>PubNubChannel</key>
 	<string>${PUBNUB_CHANNEL}</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSTemporaryExceptionMinimumTLSVersion</key>
+				<string>TLSv1.1</string>
+			</dict>
+		</dict>
+	</dict>
 	<key>APILocationEndpoint</key>
 	<string>${API_LOCATION_ENDPOINT}</string>
 </dict>
