@@ -13,7 +13,7 @@ import ObjectMapper
 class RepositoryLocation {
     var locations: Array<Location>
     
-    required init(){
+    required init() {
         self.locations = Array<Location>()
     }
     

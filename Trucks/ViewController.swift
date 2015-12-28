@@ -21,10 +21,9 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         self.mapView.setCenterCoordinate(CLLocationCoordinate2DMake(38.076, -122.515), zoomLevel: 12, animated: false)
         
         let info = NSBundle.mainBundle().infoDictionary
-        let pubnubChannel = info?["PubNubChannel"] as? String
-        
-        NSLog("using channel %@", pubnubChannel!)
-        
+        let locationString = info?["APILocationEndpoint"] as? String
+        let locationUseHTTPS = info?["APILocationUseHTTPS"] as? String
+        let locationCookie = info?["APILocationCookie"] as? String
         
         // Adding the annotations after 1.3 seconds,
         // Otherwise, they won't show up

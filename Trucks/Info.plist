@@ -66,5 +66,9 @@
 	</dict>
 	<key>APILocationEndpoint</key>
 	<string>${API_LOCATION_ENDPOINT}</string>
+	<key>APILocationCookie</key>
+	<string>${API_LOCATION_COOKIE}</string>
+	<key>APILocationUseHTTPS</key>
+	<string>${API_LOCATION_USE_HTTPS}</string>
 </dict>
 </plist>
