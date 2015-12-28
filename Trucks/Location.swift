@@ -57,8 +57,8 @@ enum LocationType: String {
 class Location: NSObject, Mappable {
     var active: Bool!
     var modifiedDate: NSDate!
-    var latitude: Double!
-    var longitude: Double!
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
     var username: String!
     var uuid: String?
     var type: LocationType = LocationType.iPad
