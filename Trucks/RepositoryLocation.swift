@@ -10,10 +10,19 @@ import UIKit
 import Mapbox
 import ObjectMapper
 
+protocol RepositoryLocationDelegate {
+    func locationsDidLoad(items:Array<Location>)
+}
+
 class RepositoryLocation {
     var locations: Array<Location>
     var locationsURL: NSURL?
     var cookie: String?
+    var updateItemsTimer: NSTimer?
+    
+    let timerUpdateInterval: NSTimeInterval = 5
+
+    var delegate: RepositoryLocationDelegate?
     
     required init() {
         self.locations = Array<Location>()
@@ -125,6 +134,29 @@ class RepositoryLocation {
             self.getItems(locationsURL, cookie:self.cookie, completion: completion)
         } else {
             completion(self.locations)
+        }
+    }
+    
+    func startLocationsSync() {
+        if self.updateItemsTimer == nil {
+            self.updateItemsTimer = NSTimer(timeInterval: self.timerUpdateInterval, target: self, selector: Selector("locationSyncTick"), userInfo: nil, repeats: true)
+            NSRunLoop.mainRunLoop().addTimer(self.updateItemsTimer!, forMode: NSRunLoopCommonModes)
+        }
+    }
+    
+    @objc func locationSyncTick() {
+        if let locationsURL = self.locationsURL {
+            self.getItems(locationsURL, cookie: self.cookie, completion: { (locations: Array<Location>) -> Void in
+                self.locationsDidLoad(locations)
+            })
+        } else {
+            self.locationsDidLoad(Array<Location>())
+        }
+    }
+    
+    func locationsDidLoad(items:Array<Location>) {
+        dispatch_async(dispatch_get_main_queue()) {
+            self.delegate?.locationsDidLoad(items)
         }
     }
 }

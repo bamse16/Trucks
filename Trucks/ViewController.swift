@@ -10,9 +10,11 @@ import UIKit
 import Mapbox
 import ObjectMapper
 
-class ViewController: UIViewController, MGLMapViewDelegate {
+class ViewController: UIViewController, MGLMapViewDelegate, RepositoryLocationDelegate {
 
     @IBOutlet weak var mapView: MGLMapView!
+    
+    var repository: RepositoryLocation!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +27,9 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         let locationUseHTTPS = info?["APILocationUseHTTPS"] as? String
         let locationCookie = info?["APILocationCookie"] as? String
         
-        let repository = RepositoryLocation()
+        self.repository = RepositoryLocation()
+        repository.delegate = self
+        
         if let locationString = locationString, useHTTPS = locationUseHTTPS {
             let httpsPrefix = (useHTTPS == "true") ? "https://" : "http://"
             let locationS = String(format:"%@%@", httpsPrefix, locationString)
@@ -40,25 +44,8 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         // https://github.com/mapbox/mapbox-gl-native/issues/1675
         // https://github.com/mapbox/mapbox-gl-native/issues/2956
         delay(1.3) {
-            var shouldShowAnnotations = false
-            if let _ = self.mapView.annotations {
-            } else {
-                shouldShowAnnotations = true
-            }
-
-            // do stuff
-            repository.getLocations({ (locations) -> Void in
-                NSLog("remote locations %@", locations)
-                
-                repository.locations = locations
-
-                let annotations = repository.asAnnotations()
-                self.mapView.addAnnotations(annotations)
-                
-                if shouldShowAnnotations {
-                    self.mapView.showAnnotations(annotations, animated: true)
-                }
-            })
+            self.repository.locationSyncTick()
+            self.repository.startLocationsSync()
         }
     }
 
@@ -87,5 +74,24 @@ class ViewController: UIViewController, MGLMapViewDelegate {
                 Int64(delay * Double(NSEC_PER_SEC))
             ),
             dispatch_get_main_queue(), closure)
+    }
+    
+    // MARK: RepositoryLocationDelegate
+    
+    func locationsDidLoad(items:Array<Location>) {
+        var shouldShowAnnotations = false
+        if let currentAnnotations = self.mapView.annotations {
+            self.mapView.removeAnnotations(currentAnnotations)
+        } else {
+            shouldShowAnnotations = true
+        }
+        
+        self.repository.locations = items
+        let annotations = repository.asAnnotations()
+        self.mapView.addAnnotations(annotations)
+        
+        if shouldShowAnnotations {
+            self.mapView.showAnnotations(annotations, animated: true)
+        }
     }
 }
