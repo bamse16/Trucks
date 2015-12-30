@@ -40,13 +40,13 @@ class ViewController: UIViewController, MGLMapViewDelegate {
         // https://github.com/mapbox/mapbox-gl-native/issues/1675
         // https://github.com/mapbox/mapbox-gl-native/issues/2956
         delay(1.3) {
-            // do stuff
-            repository.loadItems()
-            let locations = repository.asAnnotations()
+            var shouldShowAnnotations = false
+            if let _ = self.mapView.annotations {
+            } else {
+                shouldShowAnnotations = true
+            }
 
-            self.mapView.addAnnotations(locations)
-            self.mapView.showAnnotations(locations, animated: true)
-            
+            // do stuff
             repository.getLocations({ (locations) -> Void in
                 NSLog("remote locations %@", locations)
                 
@@ -54,7 +54,10 @@ class ViewController: UIViewController, MGLMapViewDelegate {
 
                 let annotations = repository.asAnnotations()
                 self.mapView.addAnnotations(annotations)
-                self.mapView.showAnnotations(annotations, animated: true)
+                
+                if shouldShowAnnotations {
+                    self.mapView.showAnnotations(annotations, animated: true)
+                }
             })
         }
     }
