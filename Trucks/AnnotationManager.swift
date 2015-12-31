@@ -10,14 +10,11 @@ import Mapbox
 
 class AnnotationManager: NSObject {
     
-    func annotationImage(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
-        if let deviceName = annotation.title {
-            let deviceLocationView = DeviceLocationView()
-            deviceLocationView.configure(deviceName!)
-            
-            let reuseIdentifier = deviceName!
-            
-            let image = deviceLocationView.mu_asImage()
+    func annotationImage(mapView: MGLMapView, imageForLocation location: Location) -> MGLAnnotationImage? {
+        let deviceLocationView = DeviceLocationView()
+        deviceLocationView.configure(location)
+        
+        if let image = deviceLocationView.mu_asImage(), reuseIdentifier = location.title {
             let annotationImage = MGLAnnotationImage(image: image, reuseIdentifier: reuseIdentifier)
             return annotationImage
         }

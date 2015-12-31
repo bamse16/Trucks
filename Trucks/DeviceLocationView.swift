@@ -10,7 +10,6 @@ import UIKit
 
 class DeviceLocationView: UIImageView {
     
-    var itemName: NSString = ""
     let itemNameLabel: UILabel = UILabel()
     
     var imageWidth: CGFloat = 33
@@ -37,25 +36,53 @@ class DeviceLocationView: UIImageView {
         self.backgroundColor = self.defaultBackgroundColor
     }
     
-    func configure(deviceName: NSString) {
-        self.configure(deviceName, font: self.defaultFont)
+    func configure(location: Location) {
+        self.configure(location, font: self.defaultFont)
     }
     
-    func configure(deviceName: NSString, font: UIFont){
-        self.itemName = deviceName
-        
-        if deviceName.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > self.maxIdLength {
-            self.itemName = deviceName.substringToIndex(self.maxIdLength)
-        }
+    func configure(location: Location, font: UIFont) {
+        let itemNameStr = titleForLocation(location)
         
         self.itemNameLabel.font = font
-        self.itemNameLabel.text = self.itemName as String
+        self.itemNameLabel.text = itemNameStr
         
-        self.resizeLabel()
+        self.resizeLabel(itemNameStr)
+        self.backgroundColor = self.backgroundForLocation(location)
     }
     
-    func resizeLabel() {
-        self.setupWidthForLabel()
+    func backgroundForLocation(location: Location) -> UIColor {
+        switch location.type {
+        case .iPad:
+            return UIColor(red: 0.24, green: 0.54, blue: 0.96, alpha: 0.9) // Blue
+
+        case .Truck:
+            return UIColor.whiteColor()
+            // return UIColor(red: 0.88, green: 0.45, blue: 0.45, alpha: 0.9) // Red
+        }
+    }
+    
+    func titleForLocation(location: Location) -> String {
+        var deviceName = location.username
+        if deviceName.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > self.maxIdLength {
+            deviceName = (deviceName as NSString).substringToIndex(self.maxIdLength)
+        }
+        
+        let symbol = self.symbolForLocation(location)
+        return String(format: "%@%@", symbol, deviceName)
+    }
+    
+    func symbolForLocation(location: Location) -> String {
+        switch location.type {
+        case .iPad:
+            return "📱 "
+            
+        case .Truck:
+            return "🚒 "
+        }
+    }
+    
+    func resizeLabel(name: String) {
+        self.setupWidthForLabel(name)
         
         var currenctFrame = self.frame
         
@@ -65,9 +92,9 @@ class DeviceLocationView: UIImageView {
         self.frame = currenctFrame
     }
     
-    func setupWidthForLabel() {
+    func setupWidthForLabel(name: String) {
         let constraintSize = CGSizeMake(1000, 1000)
-        let labelSize = self.mu_stringSize(self.itemName,
+        let labelSize = self.mu_stringSize(name,
             font: self.itemNameLabel.font,
             constrainedToSize: constraintSize
         )
@@ -94,12 +121,15 @@ class DeviceLocationView: UIImageView {
         return computedSize
     }
     
-    func mu_asImage() -> UIImage {
+    func mu_asImage() -> UIImage? {
         UIGraphicsBeginImageContext(self.bounds.size)
-        let context = UIGraphicsGetCurrentContext()
-        self.layer.renderInContext(context!)
-        let capturedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return capturedImage
+        if let context = UIGraphicsGetCurrentContext() {
+            self.layer.renderInContext(context)
+            let capturedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return capturedImage
+        }
+        
+        return nil
     }
 }

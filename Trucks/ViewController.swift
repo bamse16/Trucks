@@ -57,10 +57,14 @@ class ViewController: UIViewController, MGLMapViewDelegate, RepositoryLocationDe
     // MARK: MGLMapViewDelegate
 
     func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
-        
         let annotationManager = AnnotationManager()
-        let image = annotationManager.annotationImage(mapView, imageForAnnotation: annotation)
-        return image
+        
+        if let location = annotation as? Location {
+            let image = annotationManager.annotationImage(mapView, imageForLocation: location)
+            return image
+        }
+        
+        return nil
     }
     
     func mapView(mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
