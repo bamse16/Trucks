@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import Mapbox
 import ObjectMapper
 
 struct LocationXYZ {
@@ -54,7 +55,7 @@ enum LocationType: String {
     case Truck = "truck"
 }
 
-class Location: NSObject, Mappable {
+class Location: NSObject, Mappable, MGLAnnotation {
     var active: Bool!
     var modifiedDate: NSDate!
     var latitude: Double = 0.0
@@ -62,6 +63,20 @@ class Location: NSObject, Mappable {
     var username: String!
     var uuid: String?
     var type: LocationType = LocationType.iPad
+    
+    // MARK: - MGLAnnotation
+    
+    var title: String? {
+        get {
+            return self.username
+        }
+    }
+        
+    var coordinate: CLLocationCoordinate2D {
+        get {
+            return CLLocationCoordinate2DMake(self.latitude, self.longitude)
+        }
+    }
 
     required init?(_ map: Map) {
         

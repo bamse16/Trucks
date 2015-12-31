@@ -87,11 +87,10 @@ class ViewController: UIViewController, MGLMapViewDelegate, RepositoryLocationDe
         }
         
         self.repository.locations = items
-        let annotations = repository.asAnnotations()
-        self.mapView.addAnnotations(annotations)
+        self.mapView.addAnnotations(self.repository.locations)
         
         if shouldShowAnnotations {
-            self.mapView.showAnnotations(annotations, animated: true)
+            self.mapView.showAnnotations(self.repository.locations, animated: true)
         }
     }
 }

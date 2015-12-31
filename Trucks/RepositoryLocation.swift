@@ -48,15 +48,7 @@ class RepositoryLocation {
             }
         }
     }
-    
-    func asAnnotations() -> Array<MGLPointAnnotation> {
-        let locations = self.locations.map { (location) -> MGLPointAnnotation in
-            return LocationAnnotation(location)!.annotation() as MGLPointAnnotation
-        }
-        
-        return locations
-    }
-    
+
     func geographicMidPoint() -> CLLocationCoordinate2D {
         var x: Double = 0
         var y: Double = 0
