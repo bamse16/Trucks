@@ -131,7 +131,7 @@ class RepositoryLocation {
     
     func startLocationsSync() {
         if self.updateItemsTimer == nil {
-            self.updateItemsTimer = NSTimer(timeInterval: self.timerUpdateInterval, target: self, selector: Selector("locationSyncTick"), userInfo: nil, repeats: true)
+            self.updateItemsTimer = NSTimer(timeInterval: self.timerUpdateInterval, target: self, selector: #selector(RepositoryLocation.locationSyncTick), userInfo: nil, repeats: true)
             NSRunLoop.mainRunLoop().addTimer(self.updateItemsTimer!, forMode: NSRunLoopCommonModes)
         }
     }
