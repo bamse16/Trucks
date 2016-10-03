@@ -8,7 +8,7 @@ inhibit_all_warnings!
 use_frameworks!
 
 target 'Trucks' do
-	pod 'ObjectMapper', '~> 1.0.1'
+	pod 'ObjectMapper', '~> 1.5.0'
 	pod 'Mapbox-iOS-SDK'
 	pod 'RealmSwift'
 end

@@ -1,8 +1,8 @@
 //
-//  URLTransform.swift
+//  NSDataTransform.swift
 //  ObjectMapper
 //
-//  Created by Tristan Himmelman on 2014-10-27.
+//  Created by Yagrushkin, Evgeny on 8/30/16.
 //
 //  The MIT License (MIT)
 //
@@ -28,24 +28,23 @@
 
 import Foundation
 
-public class URLTransform: TransformType {
-	public typealias Object = NSURL
+public class NSDataTransform: TransformType {
+	public typealias Object = NSData
 	public typealias JSON = String
-
+	
 	public init() {}
-
-	public func transformFromJSON(value: AnyObject?) -> NSURL? {
-		if let URLString = value as? String,
-			let escapedURLString = URLString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()){
-			return NSURL(string: escapedURLString)
+	
+	public func transformFromJSON(value: AnyObject?) -> NSData? {
+		guard let string = value as? String else{
+			return nil
 		}
-		return nil
+		return NSData(base64EncodedString: string, options: [])
 	}
-
-	public func transformToJSON(value: NSURL?) -> String? {
-		if let URL = value {
-			return URL.absoluteString
+	
+	public func transformToJSON(value: NSData?) -> String? {
+		guard let data = value else{
+			return nil
 		}
-		return nil
+		return data.base64EncodedStringWithOptions([])
 	}
 }
