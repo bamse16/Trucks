@@ -4,17 +4,12 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Mapbox-iOS-SDK-Mapbox.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>ObjectMapper.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods.xcscheme</key>
+		<key>Pods-Trucks.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -32,27 +27,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>A4C3548D7B26B2D4636CB1F44180C522</key>
+		<key>2164F06CF5FD31E213A99CD948DA6339</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C6133369E017B7A2AE7C2B3C5EDC450C</key>
+		<key>6C0325CB9C2B7DC12BF268C97517B6E4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CE6FB03EB4451AC8140DF3F591D845C7</key>
+		<key>BE2E45F916BFFB6C77EAA696AC3A777E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DF3C7DA43039961EC4B47768CA3F810F</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EF9B176EDF19250DC4524EA429B124BD</key>
+		<key>E82421CBEE4F9A6C8D5D9FEC459CE24A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

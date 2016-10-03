@@ -1,4 +1,4 @@
-#include "./Pods/Target Support Files/Pods/Pods.debug.xcconfig"
+#include "./Pods/Target Support Files/Pods-Trucks/Pods-Trucks.debug.xcconfig"
 
 PUBNUB_CHANNEL = "pubnub-test-channel"
 

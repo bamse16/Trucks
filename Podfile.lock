@@ -1,21 +1,23 @@
 PODS:
-  - Mapbox-iOS-SDK (3.0.1)
+  - Mapbox-iOS-SDK (3.3.4)
   - ObjectMapper (1.0.1)
-  - Realm (0.96.3):
-    - Realm/Headers (= 0.96.3)
-  - Realm/Headers (0.96.3)
-  - RealmSwift (0.96.3):
-    - Realm (= 0.96.3)
+  - Realm (2.0.1):
+    - Realm/Headers (= 2.0.1)
+  - Realm/Headers (2.0.1)
+  - RealmSwift (2.0.1):
+    - Realm (= 2.0.1)
 
 DEPENDENCIES:
   - Mapbox-iOS-SDK
-  - ObjectMapper
+  - ObjectMapper (~> 1.0.1)
   - RealmSwift
 
 SPEC CHECKSUMS:
-  Mapbox-iOS-SDK: 61e79f3dd8432617bd1a66b2d7273ab5ce923ca9
+  Mapbox-iOS-SDK: b22da0d9703fcfb0a8b592b6a7f6a21264fe44b0
   ObjectMapper: 98524bac0dca46c6b3d5ee02cd410fc700ec6ce2
-  Realm: 145d3cdf78a03aee71bde5381ad7e542bd541720
-  RealmSwift: aab84968aad662f61f36473d1aea019f63481505
+  Realm: 0557ee0e4ab4f0936c90e370056d1ed6265f93d6
+  RealmSwift: 64e00af79bdcd7d2a7a23fdc1cb3faf22b80ae4c
 
-COCOAPODS: 0.38.2
+PODFILE CHECKSUM: cf857b7447bc54c5e7c882707ebd68182a7c8913
+
+COCOAPODS: 1.1.0.rc.2

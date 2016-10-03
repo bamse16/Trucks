@@ -1,1 +1,0 @@
-../../../../Mapbox-iOS-SDK/Mapbox.framework/Headers/MGLAnnotationImage.h
