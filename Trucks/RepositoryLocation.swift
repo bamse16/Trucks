@@ -16,11 +16,11 @@ protocol RepositoryLocationDelegate {
 
 class RepositoryLocation {
     var locations: Array<Location>
-    var locationsURL: NSURL?
+    var locationsURL: URL?
     var cookie: String?
-    var updateItemsTimer: NSTimer?
+    var updateItemsTimer: Timer?
     
-    let timerUpdateInterval: NSTimeInterval = 5
+    let timerUpdateInterval: TimeInterval = 5
 
     var delegate: RepositoryLocationDelegate?
     
@@ -28,24 +28,25 @@ class RepositoryLocation {
         self.locations = Array<Location>()
     }
     
-    func configure(url: NSURL?, cookie: String?) {
+    func configure(url: URL?, cookie: String?) {
         self.locationsURL = url
         self.cookie = cookie
     }
     
     func loadItems() {
         self.locations.removeAll()
-        if let path = NSBundle.mainBundle().pathForResource("location", ofType: "json") {
-            do {
-                let data = try NSData(contentsOfURL: NSURL(fileURLWithPath: path), options: NSDataReadingOptions.DataReadingMappedIfSafe)
-                if let locationItems = try NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers) as? NSArray {
-                    if let jsLocations = Mapper<Location>().mapArray(locationItems) {
-                        self.locations = jsLocations
-                    }
+        
+        guard let path = Bundle.main.path(forResource: "location", ofType: "json") else { return }
+        
+        do {
+            let data = try Data(contentsOf: URL(fileURLWithPath: path), options: Data.ReadingOptions.mappedIfSafe)
+            if let locationItems = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as? [[String: AnyObject]] {
+                if let jsLocations = Mapper<Location>().mapArray(JSONArray: locationItems) {
+                    self.locations = jsLocations
                 }
-            } catch let error as NSError {
-                print(error.localizedDescription)
             }
+        } catch {
+            print(error.localizedDescription)
         }
     }
 
@@ -76,7 +77,7 @@ class RepositoryLocation {
         return midPoint
     }
     
-    func getItems<T: Mappable>(url: NSURL, cookie: String?, completion:(Array<T>)->Void) {
+    func getItems<T: Mappable>(url: URL, cookie: String?, completion: @escaping (Array<T>)->Void) {
         var parsedList = Array<T>()
         
         var extraHeaders = Dictionary<String, String>()
@@ -87,43 +88,38 @@ class RepositoryLocation {
             extraHeaders["Cookie"] = cookie;
         }
 
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        sessionConfig.HTTPAdditionalHeaders = extraHeaders
-
-        let request = NSURLRequest(URL: url)
-        let urlSession = NSURLSession(configuration: sessionConfig)
-        let dataTask = urlSession.dataTaskWithRequest(request) {
-            (let data, let response, let error) in
-            
-            if (error == nil) {
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.httpAdditionalHeaders = extraHeaders
+        
+        let request = URLRequest(url: url)
+        let urlSession = URLSession(configuration: sessionConfig)
+        let dataTask = urlSession.dataTask(with: request) { (data, response, error) in
+            if let err = error {
+                print(err)
+            } else {
                 do {
-                    if let locationItems = try NSJSONSerialization.JSONObjectWithData(data!, options: .MutableContainers) as? NSArray {
-                        if let jsLocations = Mapper<T>().mapArray(locationItems) {
+                    if let locationItems = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? [[String: AnyObject]] {
+                        if let jsLocations = Mapper<T>().mapArray(JSONArray: locationItems) {
                             parsedList = jsLocations
                         }
                     }
-
-                    // success ...
+                
                 } catch {
-                    // failure
-                    print("Fetch failed: \((error as NSError).localizedDescription)")
+                    print("Fetch failed: \(error.localizedDescription)")
                 }
-            } else {
-                print(error)
             }
             
-            // call the completion function (on the main thread)
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 completion(parsedList)
             }
         }
         dataTask.resume()
     }
 
-    func getLocations(completion:(Array<Location>)->Void) {
+    func getLocations(completion: @escaping (Array<Location>)->Void) {
         self.locations = Array<Location>()
         if let locationsURL = self.locationsURL {
-            self.getItems(locationsURL, cookie:self.cookie, completion: completion)
+            self.getItems(url: locationsURL, cookie:self.cookie, completion: completion)
         } else {
             completion(self.locations)
         }
@@ -131,24 +127,24 @@ class RepositoryLocation {
     
     func startLocationsSync() {
         if self.updateItemsTimer == nil {
-            self.updateItemsTimer = NSTimer(timeInterval: self.timerUpdateInterval, target: self, selector: #selector(RepositoryLocation.locationSyncTick), userInfo: nil, repeats: true)
-            NSRunLoop.mainRunLoop().addTimer(self.updateItemsTimer!, forMode: NSRunLoopCommonModes)
+            self.updateItemsTimer = Timer(timeInterval: self.timerUpdateInterval, target: self, selector: #selector(RepositoryLocation.locationSyncTick), userInfo: nil, repeats: true)
+            RunLoop.main.add(self.updateItemsTimer!, forMode: .commonModes)
         }
     }
     
     @objc func locationSyncTick() {
         if let locationsURL = self.locationsURL {
-            self.getItems(locationsURL, cookie: self.cookie, completion: { (locations: Array<Location>) -> Void in
-                self.locationsDidLoad(locations)
+            self.getItems(url: locationsURL, cookie: self.cookie, completion: { (locations: Array<Location>) -> Void in
+                self.locationsDidLoad(items: locations)
             })
         } else {
-            self.locationsDidLoad(Array<Location>())
+            self.locationsDidLoad(items: Array<Location>())
         }
     }
     
     func locationsDidLoad(items:Array<Location>) {
-        dispatch_async(dispatch_get_main_queue()) {
-            self.delegate?.locationsDidLoad(items)
+        DispatchQueue.main.async {
+            self.delegate?.locationsDidLoad(items: items)
         }
     }
 }

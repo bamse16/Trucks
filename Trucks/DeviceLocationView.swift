@@ -15,12 +15,12 @@ class DeviceLocationView: UIImageView {
     var imageWidth: CGFloat = 33
     let imageHeight: CGFloat = 17
     let defaultFont: UIFont = UIFont(name: "HelveticaNeue", size: 12)!
-    let defaultBackgroundColor = UIColor.yellowColor()
+    let defaultBackgroundColor = UIColor.yellow
     
     let maxIdLength = 5
     
     convenience init() {
-        self.init(frame: CGRectZero)
+        self.init(frame: CGRect())
     }
     
     required init?(coder aDecoder: NSCoder){
@@ -30,24 +30,24 @@ class DeviceLocationView: UIImageView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.itemNameLabel.textAlignment = NSTextAlignment.Center
+        self.itemNameLabel.textAlignment = NSTextAlignment.center
         self.addSubview(self.itemNameLabel)
         
         self.backgroundColor = self.defaultBackgroundColor
     }
     
     func configure(location: Location) {
-        self.configure(location, font: self.defaultFont)
+        self.configure(location: location, font: self.defaultFont)
     }
     
     func configure(location: Location, font: UIFont) {
-        let itemNameStr = titleForLocation(location)
+        let itemNameStr = titleForLocation(location: location)
         
         self.itemNameLabel.font = font
         self.itemNameLabel.text = itemNameStr
         
-        self.resizeLabel(itemNameStr)
-        self.backgroundColor = self.backgroundForLocation(location)
+        self.resizeLabel(name: itemNameStr)
+        self.backgroundColor = self.backgroundForLocation(location: location)
     }
     
     func backgroundForLocation(location: Location) -> UIColor {
@@ -56,18 +56,20 @@ class DeviceLocationView: UIImageView {
             return UIColor(red: 0.24, green: 0.54, blue: 0.96, alpha: 0.9) // Blue
 
         case .Truck:
-            return UIColor.whiteColor()
+            return UIColor.white
             // return UIColor(red: 0.88, green: 0.45, blue: 0.45, alpha: 0.9) // Red
         }
     }
     
     func titleForLocation(location: Location) -> String {
         var deviceName = location.username
-        if deviceName.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > self.maxIdLength {
-            deviceName = (deviceName as NSString).substringToIndex(self.maxIdLength)
+        
+        if deviceName.lengthOfBytes(using: .utf8) > self.maxIdLength {
+            let index = deviceName.index(deviceName.startIndex, offsetBy: self.maxIdLength)
+            deviceName = deviceName.substring(to: index)
         }
         
-        let symbol = self.symbolForLocation(location)
+        let symbol = self.symbolForLocation(location: location)
         return String(format: "%@%@", symbol, deviceName)
     }
     
@@ -82,19 +84,19 @@ class DeviceLocationView: UIImageView {
     }
     
     func resizeLabel(name: String) {
-        self.setupWidthForLabel(name)
+        self.setupWidthForLabel(name: name)
         
         var currenctFrame = self.frame
         
-        let deviceNameSize = CGSizeMake(self.imageWidth, self.imageHeight)
+        let deviceNameSize = CGSize(width: self.imageWidth, height: self.imageHeight)
         currenctFrame.size = deviceNameSize
         self.itemNameLabel.frame = currenctFrame
         self.frame = currenctFrame
     }
     
     func setupWidthForLabel(name: String) {
-        let constraintSize = CGSizeMake(1000, 1000)
-        let labelSize = self.mu_stringSize(name,
+        let constraintSize = CGSize(width: 1000, height: 1000)
+        let labelSize = self.mu_stringSize(string: name,
             font: self.itemNameLabel.font,
             constrainedToSize: constraintSize
         )
@@ -103,28 +105,25 @@ class DeviceLocationView: UIImageView {
         self.imageWidth = max(self.imageWidth, proposedWidth)
     }
     
-    func mu_stringSize(string: NSString, font: UIFont, constrainedToSize size: CGSize) -> CGSize {
-        let opts: NSStringDrawingOptions = NSStringDrawingOptions.UsesFontLeading.union(NSStringDrawingOptions.UsesLineFragmentOrigin)
+    func mu_stringSize(string: String, font: UIFont, constrainedToSize size: CGSize) -> CGSize {
+        let opts: NSStringDrawingOptions = NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin)
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        paragraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
+        let attr = [
+            NSFontAttributeName: font,
+            NSParagraphStyleAttributeName: paragraphStyle
+        ]
         
-        var computedSize = string.boundingRectWithSize(size,
-            options: opts,
-            attributes: [
-                NSFontAttributeName: font,
-                NSParagraphStyleAttributeName: paragraphStyle
-            ],
-            context: nil).size
-        
+        var computedSize = (string as NSString).boundingRect(with: size, options: opts, attributes: attr, context: nil).size
         computedSize.height = ceil(computedSize.height)
         computedSize.width = ceil(computedSize.width)
-        return computedSize
+        return computedSize        
     }
     
     func mu_asImage() -> UIImage? {
         UIGraphicsBeginImageContext(self.bounds.size)
         if let context = UIGraphicsGetCurrentContext() {
-            self.layer.renderInContext(context)
+            self.layer.render(in: context)
             let capturedImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             return capturedImage

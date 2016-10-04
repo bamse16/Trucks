@@ -1,6 +1,6 @@
 PODS:
   - Mapbox-iOS-SDK (3.3.4)
-  - ObjectMapper (1.5.0)
+  - ObjectMapper (2.0.0)
   - Realm (2.0.1):
     - Realm/Headers (= 2.0.1)
   - Realm/Headers (2.0.1)
@@ -9,15 +9,34 @@ PODS:
 
 DEPENDENCIES:
   - Mapbox-iOS-SDK
-  - ObjectMapper (~> 1.5.0)
-  - RealmSwift
+  - ObjectMapper
+  - Realm (from `https://github.com/realm/realm-cocoa.git`)
+  - RealmSwift (from `https://github.com/realm/realm-cocoa.git`)
+
+EXTERNAL SOURCES:
+  Realm:
+    :git: https://github.com/realm/realm-cocoa.git
+    :submodules: true
+  RealmSwift:
+    :git: https://github.com/realm/realm-cocoa.git
+    :submodules: true
+
+CHECKOUT OPTIONS:
+  Realm:
+    :commit: 8a993d2e028c8f1c42d80153f01bcc382625c589
+    :git: https://github.com/realm/realm-cocoa.git
+    :submodules: true
+  RealmSwift:
+    :commit: 8a993d2e028c8f1c42d80153f01bcc382625c589
+    :git: https://github.com/realm/realm-cocoa.git
+    :submodules: true
 
 SPEC CHECKSUMS:
   Mapbox-iOS-SDK: b22da0d9703fcfb0a8b592b6a7f6a21264fe44b0
-  ObjectMapper: 386645adca9d9d23b95eda43090b09d66444cf14
+  ObjectMapper: aed2570edabbd3c9b26c939e1cabdb6558f933e0
   Realm: 0557ee0e4ab4f0936c90e370056d1ed6265f93d6
   RealmSwift: 64e00af79bdcd7d2a7a23fdc1cb3faf22b80ae4c
 
-PODFILE CHECKSUM: eee0b2d0b9b30b829aae876a22ff3a03e57a804e
+PODFILE CHECKSUM: 3097133f9edf47ef7011274b05e9abd0b1ea8a32
 
 COCOAPODS: 1.1.0.rc.2

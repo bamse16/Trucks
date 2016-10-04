@@ -20,9 +20,9 @@ class ViewController: UIViewController, MGLMapViewDelegate, RepositoryLocationDe
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.mapView.setCenterCoordinate(CLLocationCoordinate2DMake(38.076, -122.515), zoomLevel: 12, animated: false)
+        self.mapView.setCenter(CLLocationCoordinate2DMake(38.076, -122.515), animated: false)
         
-        let info = NSBundle.mainBundle().infoDictionary
+        let info = Bundle.main.infoDictionary
         let locationString = info?["APILocationEndpoint"] as? String
         let locationUseHTTPS = info?["APILocationUseHTTPS"] as? String
         let locationCookie = info?["APILocationCookie"] as? String
@@ -30,12 +30,12 @@ class ViewController: UIViewController, MGLMapViewDelegate, RepositoryLocationDe
         self.repository = RepositoryLocation()
         repository.delegate = self
         
-        if let locationString = locationString, useHTTPS = locationUseHTTPS {
+        if let locationString = locationString, let useHTTPS = locationUseHTTPS {
             let httpsPrefix = (useHTTPS == "true") ? "https://" : "http://"
             let locationS = String(format:"%@%@", httpsPrefix, locationString)
             
-            let locationURL = NSURL(string: locationS)
-            repository.configure(locationURL, cookie: locationCookie)
+            let locationURL = URL(string: locationS)
+            repository.configure(url: locationURL, cookie: locationCookie)
         }
 
         // Adding the annotations after 1.3 seconds,
@@ -56,28 +56,24 @@ class ViewController: UIViewController, MGLMapViewDelegate, RepositoryLocationDe
     
     // MARK: MGLMapViewDelegate
 
-    func mapView(mapView: MGLMapView, imageForAnnotation annotation: MGLAnnotation) -> MGLAnnotationImage? {
+    func mapView(_ mapView: MGLMapView, imageFor annotation: MGLAnnotation) -> MGLAnnotationImage? {
         let annotationManager = AnnotationManager()
         
         if let location = annotation as? Location {
-            let image = annotationManager.annotationImage(mapView, imageForLocation: location)
+            let image = annotationManager.annotationImage(mapView: mapView, imageForLocation: location)
             return image
         }
         
         return nil
     }
     
-    func mapView(mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
+    func mapView(_ mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
         return true
     }
     
-    func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
+    func delay(_ delay:Double, closure:@escaping ()->()) {
+        let when = DispatchTime.now() + delay
+        DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
     }
     
     // MARK: RepositoryLocationDelegate

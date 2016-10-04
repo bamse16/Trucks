@@ -57,10 +57,10 @@ enum LocationType: String {
 
 class Location: NSObject, Mappable, MGLAnnotation {
     var active: Bool!
-    var modifiedDate: NSDate!
+    var modifiedDate: Date!
     var latitude: Double = 0.0
     var longitude: Double = 0.0
-    var username: String!
+    var username: String = ""
     var uuid: String?
     var type: LocationType = LocationType.iPad
     
@@ -78,7 +78,7 @@ class Location: NSObject, Mappable, MGLAnnotation {
         }
     }
 
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         
     }
     
@@ -96,7 +96,7 @@ class Location: NSObject, Mappable, MGLAnnotation {
     override var description: String {
         let activeStr = self.active == true ? "active" : "inactive"
         return String(format: "Location %@, u:%@ lat/lon:%f,%f modified:%@",
-            activeStr, self.username, self.latitude, self.longitude, self.modifiedDate)
+            activeStr, self.username, self.latitude, self.longitude, self.modifiedDate.description)
     }
     
     func asLocationXYZ() -> LocationXYZ {

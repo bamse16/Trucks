@@ -12,9 +12,9 @@ class AnnotationManager: NSObject {
     
     func annotationImage(mapView: MGLMapView, imageForLocation location: Location) -> MGLAnnotationImage? {
         let deviceLocationView = DeviceLocationView()
-        deviceLocationView.configure(location)
+        deviceLocationView.configure(location: location)
         
-        if let image = deviceLocationView.mu_asImage(), reuseIdentifier = location.title {
+        if let image = deviceLocationView.mu_asImage(), let reuseIdentifier = location.title {
             let annotationImage = MGLAnnotationImage(image: image, reuseIdentifier: reuseIdentifier)
             return annotationImage
         }

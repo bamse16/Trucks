@@ -27,13 +27,10 @@ ObjectMapper is a framework written in Swift that makes it easy for you to conve
 - Struct support
 
 # The Basics
-To support mapping, a class or struct just needs to implement the ```Mappable``` protocol.
+To support mapping, a class or struct just needs to implement the ```Mappable``` protocol which includes the following functions:
 ```swift
-public protocol Mappable {
-    init?(_ map: Map)
-    mutating func mapping(map: Map)
-    static func objectForMapping(map: Map) -> Mappable? // Optional
-}
+init?(_ map: Map)
+mutating func mapping(map: Map)
 ```
 ObjectMapper uses the ```<-``` operator to define how each member variable maps to and from JSON.
 
@@ -80,15 +77,23 @@ struct Temperature: Mappable {
 }
 ```
 
-Once your class implements `Mappable`, the Mapper class handles everything else for you:
+Once your class implements `Mappable`, ObjectMapper allows you to easily convert to and from JSON. 
 
 Convert a JSON string to a model object:
 ```swift
-let user = Mapper<User>().map(JSONString)
+let user = User(JSONString: JSONString)
 ```
 
 Convert a model object to a JSON string:
 ```swift
+let JSONString = user.toJSONString(prettyPrint: true)
+```
+
+Alternatively, the `Mapper.swift` class can also be used to accomplish the above (it also provides extra functionality for other situations):
+```
+// Convert JSON String to Model
+let user = Mapper<User>().map(JSONString: JSONString)
+// Create JSON String from Model
 let JSONString = Mapper().toJSONString(user, prettyPrint: true)
 ```
 
